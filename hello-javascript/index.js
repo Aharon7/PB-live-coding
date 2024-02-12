@@ -122,4 +122,3 @@ let globalVar = 'Hallo Welt!';
 }
 
 console.log(globalVar);
-
