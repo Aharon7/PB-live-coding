@@ -110,3 +110,99 @@ function generateRandomRgbValues() {
 
 const randomRgbValues = generateRandomRgbValues();
 console.log(`Random RGB: ${genRgbString(randomRgbValues)}`);
+
+
+// Definition der Funktion "someFunc"
+function someFunc(param1, param2) {
+    console.log(`someFunc(${param1}, ${param2})`);
+}
+// Unter der Haube in etwa das hier
+// let someFunc = function(param1, param2) {
+// };
+
+// Neudefinition der Funktion "someFunc" (die alte wird ungültig)
+function someFunc() {
+    console.log("someFunc()");
+}
+// Unter der Haube in etwa eine Neuzuweisung
+// someFunc = function() {
+// }
+
+// Hier wird also nur die zweite Definiton der Funktion ausgeführt (Die Parameter werden ignoriert)
+someFunc("peter", "pan");
+
+
+// Function expressions
+function hello() {
+    console.log('Hello...');
+}
+
+const func = hello;
+func();
+
+// Anonyme Funktion
+const anonFunc = function() {
+    console.log("Eigentlich eine anonyme Funktion als Wert der Konstante anonFunc zugewiesen");
+}
+anonFunc();
+
+
+// Funktionparameter
+function countToTenAndNotify(callbackFunction) {
+    for (let i = 1; i <= 10; i++) {
+        // Code
+    }
+
+    // Führe dynamisch auswechselbaren Code aus
+    callbackFunction();
+}
+
+function notifyUser() {
+    console.log('Counted to 10...')
+}
+
+function beleidigeUser() {
+    console.log('Du bist doof!');
+}
+
+countToTenAndNotify(notifyUser);
+countToTenAndNotify(beleidigeUser);
+
+
+function get10() {
+    console.log('Returning number 10');
+    return 10;
+}
+
+const ten = get10();
+function callAnotherFuntion(callback) {
+    // Wenn callback einen Wert hat
+    if (callback && typeof callback === 'function') {
+        // Rufe callback als Funktion auf
+        callback();
+    } else {
+        console.log("Parameter callback ist offenbar keine Funktion, die man aufrufen könnte...");
+    }
+}
+callAnotherFuntion(get10);
+
+callAnotherFuntion(function() {
+    console.log('hihi bin ne anonyme callback function');
+});
+
+// const arr = [12,1,2];
+// arr.forEach(function (item) {
+//     console.log(item);
+// });
+// arr.forEach(function (item) {
+//     console.log(item*2);
+// });
+
+
+// function printNameCapitalized(name) {
+//     return name[0].toUpperCase()+name.slice(1);
+// }
+const printNameCapitalized = name => name[0].toUpperCase()+name.slice(1);
+
+console.log(printNameCapitalized('peter'));
+

@@ -65,4 +65,43 @@ const searchTerms = [
     ]
 */
 
+// Liste der UserIds in entsprechender Reihenfolge
 const userIds = [52, 12, 99, 1, 77];
+
+// Ergebnisarray
+const userSearchTerms = [];
+
+// Durchlaufe die Liste der Suchbegriffssammlungen
+for (let i = 0; i < searchTerms.length; i++) {
+    // Neues Array für Zusammensetzung von ID und Suchbegriffen
+    const userEntry = [];
+    // Füge UserId am Anfang hinzu
+    userEntry.push(userIds[i]);
+
+    // Durchlaufe die Liste der Suchbegriff des Users
+    for (let j = 0; j < searchTerms[i].length; j++) {
+        // Referenz auf den jeweiligen Suchbegriff
+        const searchTerm = searchTerms[i][j];
+
+        // Teile grundsätzlich auf
+        const splittedTerms = searchTerm.split(' ');
+
+        // Füge Original normalisiert hinzu
+        userEntry.push(splittedTerms.join(' ').toLocaleLowerCase());
+
+        // Wenn bei Aufteilung mehr als 1 Element ensteht (d.h. es gibt ein Space drinnen)
+        if (splittedTerms.length > 1) {
+            // Durchlaufe alle Einzeilteile des aufgeteilten Suchbegriffs
+            for (let k = 0; k < splittedTerms.length; k++) {
+                // Hänge Einzelteile an
+                userEntry.push(splittedTerms[k].toLowerCase());
+            }
+
+            // Oder in kurz mit dem Spread-Operator (kennen wir eigentlich noch nicht), wenn man die Terms bereits normalisiert hat
+            // userEntry.push(...splittedTerms);
+        }
+    }
+
+    userSearchTerms.push(userEntry);
+}
+console.log(userSearchTerms);
