@@ -186,7 +186,7 @@ function callAnotherFuntion(callback) {
 }
 callAnotherFuntion(get10);
 
-callAnotherFuntion(function() {
+callAnotherFuntion(function () {
     console.log('hihi bin ne anonyme callback function');
 });
 
@@ -206,3 +206,94 @@ const printNameCapitalized = name => name[0].toUpperCase()+name.slice(1);
 
 console.log(printNameCapitalized('peter'));
 
+
+// Rekursion -  Eine Funktion, die sich selbst wieder aufruft
+function spueleGeschirr(geschirrStapel) {
+    console.log('Spuele einen Teller ab.');
+    geschirrStapel -= 1;
+
+    if (geschirrStapel > 0) {
+        spueleGeschirr(geschirrStapel);
+    } else {
+        console.log('Spuele ist leer');
+    }
+}
+
+function spueleGeschirr(geschirrStapel) {
+    while (geschirrStapel > 0) {
+        console.log('Spuele einen Teller ab.');
+        geschirrStapel -= 1;
+    }
+
+    console.log('Spuele ist leer');
+}
+
+spueleGeschirr(5);
+
+
+/* 
+    ------- Pure Functions -------
+    1. Muss bei gleichen Eingaben, gleiche Ergebnisse liefern
+    2. Darf keine Seiteneffekte erzeugen, also keine Variablen ausserhalb veraendern
+    3. Darf nicht von Variablen ausserhalb abhaengig sein, also nicht darauf zugreifen
+*/
+let globalVariable = 12;
+
+function impureFunction() {
+    globalVariable = 22;
+}
+
+let someArr = [1,2,3];
+
+/* 
+    Javascript gilt fuer komplexe Datentypen wie Array, Object, etc. CopyByReferenz.
+    D.h. statt nur eine Kopie des Wertes an die Funktion als Parameter zu uebergeben,
+    wird eine REFERENZ auf diesen Wert uebergeben.
+    Bei primitiven Datentypen wie string, number, boolean, etc. gilt CopyByValue
+    -> Der Wert wird kopiert an die Funktion als Parameter uebergeben.
+*/
+function pureFunction(arr) {
+    // Um die Funktion wirklich pure zu machen,
+    // muss das uebergebene Array kopiert werden
+    const arrCopy = [...arr];
+    arrCopy.push(4);
+    return arrCopy;
+}
+
+// Alternativ kann dafuer gesorgt werden,
+// dass man der Funktion nur Arraykopien uebergibt
+function pureFunction(arr) {
+    arr.push(4);
+    return arr;
+}
+pureFunction([...someArr]);
+pureFunction([1,2,3]);
+
+const newArr = pureFunction(someArr);
+console.log('newArr', newArr); // newArr [ 1, 2, 3, 4 ]
+console.log('someArr', someArr); // someArr [ 1, 2, 3, 4 ]
+
+const origArr = [3,2,1];
+
+// Spread-Syntax in Zusammenhang mit neuem Array zum Kopieren eines anderen Arrays
+// Funktioniert allerdings nur wirklich mit 1D-Arrays, die primitive Datentypen als Elemente haben
+const copyArr = [...origArr];
+
+/* 
+    Folgende Regel kann abgelitten werden:
+    Wenn eine Funktion ein Array als Parameter entgegennimmt und veraendert,
+    das Original aber erhalten bleiben soll:
+    - Entweder muss innerhalb der Funktion eine Kopie des Arrays erstellt werden fuer die Veraenderung
+    - Oder der Funktion wird grundsaetzlich nur eine Kopie eines Arrays uebergeben
+*/
+
+
+
+function argsCount() {
+    console.log(arguments);
+}
+
+// const argsCount = () => {
+//     console.log(arguments);
+// };
+argsCount();
