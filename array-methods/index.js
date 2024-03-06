@@ -58,3 +58,33 @@ const capitalizedNames = uncapitalizedNames.map((name) => {
 });
 // const capitalizedNames = uncapitalizedNames.map((name) => name.charAt(0).toUpperCase() + name.slice(1));
 console.log(capitalizedNames);
+
+
+
+/* 
+    Array.reduce() wird immer dann verwendet, wenn aus einem Array ein Ergebnis eines einfacheren Datentyps entstehen soll.
+    Uebliches Beispiel: Aus einem Array mit Zahlen soll eine Summe errechnet werden; Array(Zahlen) -> Zahl.
+    Die Methode erhaelt zwei Parameter:
+    - reducerCallback(accumulator, currentValue)
+    - initialValue // Der optionale Startwert. Wird manchmal als Trick zum Einstellen des Ergebnisdatentyps verwendet.
+*/
+const someNumbers = [1,2,3,4,5];
+
+// Errechne Summe der Zahlen in someNumbers klassisch mit einer For-Schleife
+let sum = 0;
+someNumbers.forEach(currentValue => sum += currentValue);
+console.log(sum);
+
+// Errechne Summe der Zahlen in someNumbers mithilfe von reduce()
+const reducedSum = someNumbers.reduce((accumulator, currentValue) => {
+    return accumulator+currentValue;
+}, 0);
+console.log(reducedSum);
+
+/* 
+    Moechten wir aus dem Array mit Zahlen einen String mit allen Zahlen als Ziffern zusammensetzen,
+    bietet es sich an, den Parameter initialValue auf einen leeren String zu setzen,
+    denn nun kann problemlos das erste Ergebnis des Callbacks daraufgerechnet werden.
+*/
+const allNumbersAsString = someNumbers.reduce((accumulator, currentValue) => accumulator.concat(currentValue), "");
+console.log(allNumbersAsString);
