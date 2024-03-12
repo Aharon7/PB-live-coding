@@ -74,6 +74,7 @@ console.log(objectKeys);
 console.log('Hat Eigenschaft bankaccount:', objectKeys.includes('bankaccount'));
 
 
+
 /* 
     Moechte man ueberpruefen, ob ein Objekt eine bestimmte Eigenschaft besitzt,
     kann man die fuer jedes Objekt eingebaute Methode .hasOwnProperty(PROP_KEY) nutzen.
@@ -94,17 +95,17 @@ const pet = {
     name: "fluffy",
     animalType: 'dog',
 
-    // makeNoise: function() {
-    //     console.log('Wau wau');
-    // },
+    makeNoise: function() {
+        console.log('Wau wau');
+    },
 
     // makeNoise: () => {
     //     console.log('Wau wau');
     // },
 
-    makeNoise() {
-        console.log('Wau wau');
-    },
+    // makeNoise() {
+    //     console.log('Wau wau');
+    // },
 
     // sayOwnName: function() {
         // this-Referenz gibt uns Zugriff auf das Objekt in dem sich die Methode befindet
@@ -133,7 +134,7 @@ const someObj = {
     prop1: 'prop1',
     prop2: 'prop2'
 };
-console.log(typeof someObj);
+console.log(typeof someObj); // 'object'
 console.log(Object.keys(someObj));
 
 /* 
@@ -141,7 +142,7 @@ console.log(Object.keys(someObj));
     Daher muss man etwas aufpassen, wenn es darum geht Objekte von eigentlich Arrays zu unterscheiden.
 */
 const someArr = [1,2,3,4];
-console.log(typeof someArr);
+console.log(typeof someArr); // 'object'
 console.log(Object.keys(someArr));
 // const arr = {
 //     0: 1,
@@ -191,12 +192,17 @@ function compareObjectsByValue(objA, objB) {
 
         // Extrahiere den Wert der Eigenschaft aus dem zweiten Objekt
         const valueB = objB[keyA];
-        console.log(valueB);
+        // console.log(valueB);
 
-        // Wenn die Werte nicht gleich sind -> nicht gleich
-        if (valueA !== valueB) valuesEqual = false;
+        // Wenn die zu vergleichenden Werte vom Typ 'object' sind,
+        // rufe sich selbst fuer diese Unterobjekte auf (Rekursion)
+        if ((typeof valueA === 'object') || (typeof valueB === 'object')) {
+            valuesEqual = valuesEqual && compareObjectsByValue(valueA, valueB);
+        } else {
+            // Wenn die Werte nicht gleich sind -> nicht gleich
+            if (valueA !== valueB) valuesEqual = false;
+        }
     }
-
 
     // for (let i = 0; i < valuesOfA.length; i++) {
     //     // Gibt es einen Unterschied bei den Werten, können die Objekte nicht gleich sein
@@ -215,16 +221,157 @@ console.log(compareObjectsByValue(comparableObject, {alter: 29, name: 'mary'}));
 */
 
 const objA = {
-    hihi: 'bla',
-    prop2: 'blub'
+    prop1: 'bla',
+    prop2: 'blub',
+    prop3: {
+        subProp1: 'asd',
+        subProp2: 12,
+        subProp3: true
+    }
 };
 
 const objB = {
     prop1: 'bla',
-    prop2: 'blub'
+    prop2: 'blub',
+    prop3: {
+        subProp1: 'asd',
+        subProp2: 12,
+        subProp3: true
+    }
 };
 
-valueProp1A = objA['hihi'];
-valueProp1B = objB['hihi'];
+console.log('Geschachtelte Objekte sind gleich: ',compareObjectsByValue(objA, objB));
 
-console.log(valueProp1A, valueProp1B);
+// valueProp1A = objA['hihi'];
+// valueProp1B = objB['hihi'];
+
+// console.log(valueProp1A, valueProp1B);
+
+
+
+/* 
+    Objekte als Array-Items.
+    So wie es moeglich ist, Arrays in Arrays zu schachteln,
+    ist es auch moeglich, Objekte als Elemente eines Arrays anzulegen.
+*/
+const pets = [
+    {
+        name: 'doggo',
+        type: 'dog',
+        age: 2
+    },
+    {
+        name: 'mautzi',
+        type: 'cat',
+        age: 3
+    },
+    {
+        name: 'pieps',
+        type: 'mouse',
+        age: 4
+    },
+];
+
+pets.forEach(pet => {
+    console.log(pet.name);
+});
+
+const john = {
+    name: 'John Smith',
+    age: 32,
+    friends: [
+        'hundertmarkandre',
+        'gefaehrlicherHubert',
+        'kalle'
+    ]
+};
+john.friends.forEach(friend => {
+    console.log(`${friend} is a friend of john`);
+});
+
+const johnImpersonator = john; // Keine Wertekopie, lediglich eine Referenzkopie
+console.log(johnImpersonator);
+johnImpersonator.name = 'John \'The Dangerous\' Smith';
+console.log(johnImpersonator);
+console.log(john);
+
+
+const numbers = [1,2,3];
+const numbersCopy = [...numbers]; // [numbers[0], numbers[1], numbers[2]]
+
+// Shallow-Copy (Seichte/Flache Kopie)
+const johnCopy = {...john};
+console.log('Kopie von john', johnCopy);
+johnCopy.name = 'J';
+johnCopy.friends.push('Dirty Dan');
+console.log('Kopie von john', johnCopy);
+console.log('Original von john', john);
+
+/* 
+    Um eine Tiefenkopie (deep copy) eines Objekts zu erstellen,
+    muss eine eigene Funktion her.
+*/
+function createCopy(origObj) {
+    // Leeres Objekt fuer das Ergebnis
+    let copy = {};
+
+    // Schleife durch alle Properties
+    for (const key in origObj) {
+        // Extrahiere jeweiligen Wert der Property
+        const value = origObj[key];
+
+        // Wenn Wert selbst ein Objekt -> Rekursion
+        if (typeof value === 'object') {
+            copy[key] = createCopy(value);
+
+        } else {
+            // Kopiere den Wert ins Zielobjekt
+            copy[key] = value;
+        }
+    }
+
+    // Gebe fertige Kopie zurueck
+    return copy;
+}
+
+const nestedObject = {
+    strProp: 'string',
+    numProp: 0,
+    boolProp: true,
+    objProp: {
+        strSubProp: 'string',
+        arrSubProp: [1,2,3,4] // Wenn Array, muss die Kopiefunktion angepasst werden.
+    }
+};
+
+const nestedObjectCopy = createCopy(nestedObject);
+nestedObjectCopy.objProp.strSubProp = 'hallo welt';
+console.log(nestedObjectCopy);
+console.log(nestedObject);
+
+
+// Destrukturieren von Objekten
+const simpleObj = {
+    name: 'peter',
+    age: 12,
+    job: 'Freibeuter'
+};
+
+const {name, age, job} = simpleObj;
+console.log(name, age, job);
+
+// Spreadsyntax fuer flache Kopien in ein anderes Objekt
+const newObject = {
+    ...simpleObj,
+    fly() {
+        console.log('yipiiiee');
+    }
+};
+
+console.log(newObject);
+newObject.fly();
+
+
+function validateUserData(name, username) {
+
+}
