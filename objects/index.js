@@ -349,6 +349,17 @@ nestedObjectCopy.objProp.strSubProp = 'hallo welt';
 console.log(nestedObjectCopy);
 console.log(nestedObject);
 
+/* 
+    Glücklicherweise gibt es seit kurzem eine eingebaute Funktion für Tiefenkopien.
+    structuredClone(OBJEKT) nimmt ein Objekt entgegen und erstellt eine wirkliche Tiefenkopie.
+*/
+const deepClone = structuredClone(nestedObject);
+console.log(deepClone !== nestedObject);
+deepClone.objProp.arrSubProp.push(12);
+console.log(deepClone);
+console.log(nestedObject);
+
+
 
 // Destrukturieren von Objekten
 const simpleObj = {
@@ -371,7 +382,45 @@ const newObject = {
 console.log(newObject);
 newObject.fly();
 
+/* 
+    Um sich eine Liste der vollständigen Key-Values-Paare zu erzeugen,
+    kann man die statische Methode Object.entries() verwenden.
+    Diese liefert ein Array mit den Key-Value-Paaren als Unterarray.
+*/
+const entries = Object.entries({
+    favoriteColor: 'red',
+    favortiteFood: 'pasta',
+    favoriteNumber: 12
+});
 
-function validateUserData(name, username) {
+/* 
+    [ 
+        ['favoriteColor', 'red'], 
+        ['favortiteFood', 'pasta'], 
+        ['favoriteNumber', 12] 
+    ]
+*/
+console.log(entries); 
 
-}
+/* 
+    Aus dieser 2D-Arraystruktur lässt auch wieder ein Objekt erzeugen.
+*/
+const objectFromEntries = Object.fromEntries(entries);
+console.log(objectFromEntries);
+
+/* 
+    Neben einigen anderen nützlichen Methoden,
+    gibt es auch die Methode Object.freeze(),
+    die es uns erlaubt, ein Objekt "einzufrieren"
+    und damit NICHT erweiterbar zu machen.
+*/
+const freezeMe = {
+    prop1: 'abc',
+    prop2: 12
+};
+Object.freeze(freezeMe);
+freezeMe.prop3 = true;
+console.log(freezeMe);
+
+// Prüfe, ob eingefrohren
+console.log(Object.isFrozen(freezeMe));
