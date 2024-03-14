@@ -88,3 +88,103 @@ console.log(reducedSum);
 */
 const allNumbersAsString = someNumbers.reduce((accumulator, currentValue) => accumulator.concat(currentValue), "");
 console.log(allNumbersAsString);
+
+
+/* 
+    Javascript bietet eine eingebaute Array-Methode zum Sortieren der Elemente.
+    Array.sort(compareFunc) nimmt als Parameter üblicherweise eine Vergleichsfunktion entgegen.
+    Diese Vergleichsfunktion spezifiziert wie Wertepaare aus dem Array vergleichen werden sollen,
+    um sie entsprechend des gewünschten Ergebnisses zu sortieren.
+
+    ACHTUNG: array.sort() sortiert das Originalarray. Soll das nicht geschehen, muss eine Kopie verwendet werden!
+*/
+const nums = [6,4,4,8,1,12];
+
+// Vergleichsfunktion für aufsteigende Reihenfolge
+function compareNumsAsc(a,b) {
+    // Wenn erster Wert VOR den zweiten Wert gehört,
+    // gebe -1 zurück
+    if (a < b) return -1;
+
+    // Wenn erster Wert HINTER den zweiten gehört,
+    // gebe 1 zurück
+    if (a > b) return 1;
+
+    // Ansonsten (beide gleichwertig) gebe 0 zurück
+    return 0;
+}
+
+// Vergleichsfunktion für absteigende Reihenfolge
+function compareNumsDesc(a,b) {
+    // Wenn erster Wert HINTER den zweiten Wert gehört,
+    // gebe -1 zurück
+    if (a > b) return -1;
+
+    // Wenn erster Wert VOR den zweiten gehört,
+    // gebe 1 zurück
+    if (a < b) return 1;
+
+    // Ansonsten (beide gleichwertig) gebe 0 zurück
+    return 0;
+}
+
+nums.sort(compareNumsDesc);
+console.log(nums);
+
+
+const people = [
+    {
+        name: 'karl',
+        age: 32
+    },
+    {
+        name: 'jochen',
+        age: 28
+    },
+    {
+        name: 'henriette',
+        age: 28
+    },
+    {
+        name: 'alfred',
+        age: 28
+    },
+    {
+        name: 'sabine',
+        age: 64
+    },
+    {
+        name: 'peter',
+        age: 12
+    },
+    {
+        name: 'helmut',
+        age: 12
+    },
+];
+
+const peopleCopy = structuredClone(people);
+
+
+// Sortiere Personenobjekte nach Alter
+peopleCopy.sort((personA, personB) => {
+    if (personA.age < personB.age) return -1;
+    if (personA.age > personB.age) return 1;
+    return 0;
+});
+
+// Sortiere Personenobjekte nach Name
+peopleCopy.sort((personA, personB) => {
+    if (personA.name.toLocaleLowerCase() < personB.name.toLocaleLowerCase()) return -1;
+    if (personA.name.toLocaleLowerCase() > personB.name.toLocaleLowerCase()) return 1;
+    return 0;
+});
+console.log(peopleCopy);
+
+
+/* 
+    Möchten wir nach zwei Aspekten der Objekte sortieren (z.B. Alter und Name),
+    müssen wir uns eine Gewichtung überlegen.
+    Soll z.B. grundsätzlich nach Alter und innerhalb der Altersgruppen nach Name sortiert werden?
+    Order anders herum?
+*/
