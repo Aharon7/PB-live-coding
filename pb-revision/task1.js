@@ -253,3 +253,4 @@ COURSES.forEach(course => course.removeStudent = removeStudent);
 console.log('gelöschter Eintrag', COURSES[2].removeStudent('joh-doe-19991231'));
 console.log(COURSES[2].students);
 COURSES[0].removeStudent('joh-doe-19991231'); // Nicht vorhanden
+
